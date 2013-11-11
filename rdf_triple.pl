@@ -285,7 +285,7 @@ global_ref(In, Out) :-
 	        rdf_name_space(RDF)
 	    ->	atom_concat(RDF, Local, Out)
 	    ;	atom_concat(NS, Local, Out0),
-		uri_normalized_iri(Out0, Out)
+		iri_normalized(Out0, Out)
 	    )
 	;   Out = In
 	).
@@ -368,7 +368,10 @@ set_bnode_sharing(_, true).
 set_anon_prefix(Options, erase(Ref)) :-
 	option(base_uri(BaseURI), Options),
 	nonvar(BaseURI), !,
-	atomic_list_concat(['__', BaseURI, '#'], AnonBase),
+	(   BaseURI == []
+	->  AnonBase = '__'
+	;   atomic_list_concat(['__', BaseURI, '#'], AnonBase)
+	),
 	asserta(anon_prefix(AnonBase), Ref).
 set_anon_prefix(_, true).
 

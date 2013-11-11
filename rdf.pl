@@ -202,14 +202,17 @@ process_rdf(File, OnObject, M:Options0) :-
 	->  Source = BaseURI
 	;   is_stream(File)
 	->  In = File,
-	    option(db(Source), Options, BaseURI)
+	    option(graph(Source), Options, BaseURI)
 	;   open(File, read, In, [type(binary)]),
 	    Close = In,
 	    Source = File
 	),
 	new_sgml_parser(Parser, [dtd(DTD)]),
 	def_entities(EntOptions, DTD),
-	set_sgml_parser(Parser, file(Source)),
+	(   Source \== []
+	->  set_sgml_parser(Parser, file(Source))
+	;   true
+	),
 	set_sgml_parser(Parser, dialect(xmlns)),
 	set_sgml_parser(Parser, space(sgml)),
 	do_process_rdf(Parser, In, NSList, Close, Cleanup, ProcessOptions).
