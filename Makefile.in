@@ -18,7 +18,7 @@ include ../Makefile.defs
 all:
 		@echo "Nothing to do for this package"
 
-install:	$(LIBSRCPL) xpce-install
+install:	$(LIBSRCPL) xpce-install install-examples
 		$(INSTALL_DATA) $(LIBSRCPL) $(DESTDIR)$(PLLIBDIR)
 		$(MKINDEX)
 
@@ -43,8 +43,10 @@ uninstall:
 		$(MKINDEX)
 
 check::
-		$(PL) -q -f test_rdf.pl -g test_rdf,halt -t 'halt(1)'
-		$(PL) -q -f test_write.pl -g test_write,halt -t 'halt(1)'
+		$(PL) -q -f $(srcdir)/test_rdf.pl -g test_rdf,halt -t 'halt(1)'
+		$(PL) -q -f $(srcdir)/test_write.pl -g test_write,halt -t 'halt(1)'
+
+install_examples::
 
 ################################################################
 # Clean
